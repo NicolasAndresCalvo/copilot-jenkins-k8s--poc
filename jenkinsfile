@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh 'git clone ${GITHUB_REPO} .'
+                sh 'git clone ${GITHUB_REPO} test'
             }
         }
 
