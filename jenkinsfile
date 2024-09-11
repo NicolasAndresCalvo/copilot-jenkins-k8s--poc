@@ -5,19 +5,22 @@ pipeline {
         DOCKERHUB_USERNAME = 'nicolasandrescalvo'
         DOCKERHUB_REPO = 'nicolasandrescalvo/copilot-jenkins-k8s'
         DOCKERHUB_CREDENTIALS = credentials('JENKINS_PAT')
-        GITHUB_REPO = 'https://github.com/NicolasAndresCalvo/copilot-jenkins-k8s-poc'
+        GITHUB_REPO = 'git@github.com:NicolasAndresCalvo/copilot-jenkins-k8s-poc.git'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                sh 'git clone ${GITHUB_REPO} test'
+                sh 'git clone ${GITHUB_REPO} .'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'docker build -t ${DOCKERHUB_REPO} .'
+                script {
+                    def tag = "jenkins-run-${env.BUILD_NUMBER}"
+                    sh "docker build -t ${DOCKERHUB_REPO}:${tag} ."
+                }
             }
         }
 
@@ -29,7 +32,10 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push ${DOCKERHUB_REPO}:latest'
+                script {
+                    def tag = "jenkins-run-${env.BUILD_NUMBER}"
+                    sh "docker push ${DOCKERHUB_REPO}:${tag}"
+                }
             }
         }
     }
