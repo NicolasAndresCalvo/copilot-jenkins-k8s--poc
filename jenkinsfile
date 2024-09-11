@@ -5,7 +5,7 @@ pipeline {
         DOCKERHUB_USERNAME = 'nicolasandrescalvo'
         DOCKERHUB_REPO = 'nicolasandrescalvo/copilot-jenkins-k8s'
         DOCKERHUB_CREDENTIALS = credentials('JENKINS_PAT')
-        GITHUB_REPO = 'git@github.com:NicolasAndresCalvo/copilot-jenkins-k8s-poc.git'
+        GITHUB_REPO = 'https://github.com/NicolasAndresCalvo/copilot-jenkins-k8s-poc'
     }
 
     stages {
