@@ -1,7 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-node-app-namespace
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-node-app
+  namespace: my-node-app-namespace
 spec:
   replicas: 3
   selector:
@@ -14,7 +21,7 @@ spec:
     spec:
       containers:
       - name: my-node-app
-        image: nicolasandrescalvo/copilot-jenkins-k8s:latest
+        image: nicolasandrescalvo/copilot-jenkins-k8s:jenkins-run-6
         ports:
         - containerPort: 3000
 
@@ -23,6 +30,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: my-node-app
+  namespace: my-node-app-namespace
 spec:
   selector:
     app: my-node-app
