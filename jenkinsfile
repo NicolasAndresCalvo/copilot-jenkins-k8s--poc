@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_USERNAME = 'nicolasandrescalvo'
+        DOCKERHUB_REPO = 'nicolasandrescalvo/copilot-jenkins-k8s'
+        DOCKERHUB_CREDENTIALS = credentials('JENKINS_PAT')
+        GITHUB_REPO = 'https://github.com/NicolasAndresCalvo/copilot-jenkins-k8s-poc'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                sh 'git clone ${GITHUB_REPO} .'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'docker build -t ${DOCKERHUB_REPO} .'
+            }
+        }
+
+        stage('Login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+            }
+        }
+
+        stage('Push') {
+            steps {
+                sh 'docker push ${DOCKERHUB_REPO}:latest'
+            }
+        }
+    }
+}
